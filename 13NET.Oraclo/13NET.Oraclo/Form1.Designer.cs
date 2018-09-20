@@ -37,6 +37,7 @@ namespace _13NET.Oraclo
             this.rtbResposta = new System.Windows.Forms.RichTextBox();
             this.btnResponder = new System.Windows.Forms.Button();
             this.bwEsperaPerguntas = new System.ComponentModel.BackgroundWorker();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -113,12 +114,23 @@ namespace _13NET.Oraclo
             // 
             this.bwEsperaPerguntas.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bwEsperaPerguntas_DoWork);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(289, 7);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(66, 45);
+            this.button1.TabIndex = 40;
+            this.button1.Text = "True";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // fmMain
             // 
             this.AcceptButton = this.btnResponder;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(443, 185);
+            this.ClientSize = new System.Drawing.Size(442, 185);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnResponder);
             this.Controls.Add(this.rtbResposta);
             this.Controls.Add(this.pnStatusResposta);
@@ -147,6 +159,7 @@ namespace _13NET.Oraclo
         private System.Windows.Forms.RichTextBox rtbResposta;
         private System.Windows.Forms.Button btnResponder;
         private System.ComponentModel.BackgroundWorker bwEsperaPerguntas;
+        private System.Windows.Forms.Button button1;
     }
 }
 

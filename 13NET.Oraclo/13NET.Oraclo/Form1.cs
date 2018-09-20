@@ -16,8 +16,10 @@ namespace _13NET.Oraclo
 {
     public partial class fmMain : Form
     {
+        bool respondeAuto = true;
         const string CHANNEL_PERGUNTAS = "perguntas";
-        const string connectionString = "localhost";
+        const string connectionString = "191.232.234.20";
+        const string nomeGrupo = "CaDeGui";
 
         private IDatabase _db;
         private ISubscriber _sub;
@@ -39,17 +41,42 @@ namespace _13NET.Oraclo
         private void bwEsperaPerguntas_DoWork(object sender, DoWorkEventArgs e)
         {
             _sub.Subscribe(CHANNEL_PERGUNTAS, (channel, message) => {
-
-                pnStatusResposta.Invoke((MethodInvoker)delegate
-                {
-                    pnStatusResposta.BackColor = Color.Green;
-                });
-
                 var perguntaSplit = message.ToString().Split(':');
 
-                Pergunta pergunta = new Pergunta { ID = perguntaSplit[0], Texto = perguntaSplit[1] };
+                if (respondeAuto)
+                {
+                    string resp = "Não sei responder isso";
+                    try
+                    {
+                        var somaSplit = perguntaSplit[1].Replace("?", "").Split('+');
+                        var s1 = Convert.ToInt32(somaSplit[0]);
+                        var s2 = Convert.ToInt32(somaSplit[1]);
 
-                PrintPergunta(pergunta);
+                        resp = (s1 + s2).ToString();
+                    }
+                    catch (Exception) { }
+
+                    var resposta = new Resposta
+                    {
+                        IDPergunta = perguntaSplit[0],
+                        NomeGrupo = nomeGrupo,
+                        Texto = resp
+                    };
+
+                    Responder(resposta);
+
+                    LimpaUI(true);
+                }
+                else
+                {
+                    pnStatusResposta.Invoke((MethodInvoker)delegate
+                    {
+                        pnStatusResposta.BackColor = Color.Green;
+                    });
+
+                    Pergunta pergunta = new Pergunta { ID = perguntaSplit[0], Texto = perguntaSplit[1] };
+                    PrintPergunta(pergunta);
+                }
             });
         }
 
@@ -85,7 +112,7 @@ namespace _13NET.Oraclo
             var resposta = new Resposta
             {
                 IDPergunta = lbPerguntaID.Text,
-                NomeGrupo = "GrupoGUI",
+                NomeGrupo = nomeGrupo,
                 Texto = rtbResposta.Text
             };
 
@@ -118,6 +145,13 @@ namespace _13NET.Oraclo
             {
                 pnStatusResposta.BackColor = Color.Red;
             });
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            respondeAuto = !respondeAuto;
+
+            button1.Text = respondeAuto.ToString();
         }
     }
 }
